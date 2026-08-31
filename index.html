@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B0D10">
-<title>Richard's Run Lab</title>
+<title>Run Lab</title>
 <style>
 :root{
   --bg:#0B0D10; --card:#14181D; --border:#232A33; --text:#E9ECF1; --muted:#8B93A1;
@@ -40,7 +40,7 @@ svg.ic{width:20px;height:20px;flex:none;vertical-align:-4px}
 .btn.primary{background:var(--bolt);color:#0B0D10;border-color:var(--bolt)}
 .btn.danger{background:var(--clay);color:#0B0D10;border-color:var(--clay)}
 .btn.ghost{background:transparent}
-.btn.small{min-height:38px;font-size:13px;padding:0 12px;border-radius:10px}
+.btn.small{min-height:44px;font-size:13px;padding:0 12px;border-radius:10px}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btn.pill{border-radius:999px;padding:0 14px}
 
@@ -72,7 +72,7 @@ svg.ic{width:20px;height:20px;flex:none;vertical-align:-4px}
 .hero .h-row{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
 .h-ctas{display:flex;gap:8px;margin-top:12px}
 .h-ctas .h-start{flex:1;width:auto}
-.modechip{border:1px solid var(--border);border-radius:999px;min-height:36px;padding:0 12px;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--muted);background:#1A2027}
+.modechip{border:1px solid var(--border);border-radius:999px;min-height:44px;padding:0 14px;font-size:12px;font-weight:800;letter-spacing:.04em;color:var(--muted);background:#1A2027}
 .weekhero{display:flex;gap:10px;margin:0 0 12px}
 .weekstat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px}
 .weekstat .ws-num{font-size:30px;font-weight:800;line-height:1.05;letter-spacing:-.02em}
@@ -80,7 +80,7 @@ svg.ic{width:20px;height:20px;flex:none;vertical-align:-4px}
 
 /* Library */
 .libfilter{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
-.chipbtn{border:1px solid var(--border);border-radius:999px;min-height:36px;padding:0 12px;font-size:12px;font-weight:800;color:var(--muted);background:var(--card)}
+.chipbtn{border:1px solid var(--border);border-radius:999px;min-height:44px;padding:0 14px;font-size:12px;font-weight:800;color:var(--muted);background:var(--card)}
 .chipbtn.on{color:#0B0D10;background:var(--bolt);border-color:var(--bolt)}
 .wrow{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:8px;width:100%;text-align:left}
 .wrow .w-main{flex:1;min-width:0}
@@ -154,6 +154,10 @@ body.modalopen{overflow:hidden}
 
 #storagewarn{position:fixed;top:0;left:0;right:0;z-index:80;background:var(--clay);color:#0B0D10;font-weight:700;font-size:13px;padding:8px 14px;display:flex;align-items:center;gap:10px;justify-content:center}
 #storagewarn button{color:#0B0D10;font-weight:800;min-width:44px;min-height:44px;display:flex;align-items:center}
+@supports (font: -apple-system-body){
+  body{font:-apple-system-body;line-height:1.5}
+  button,input,textarea,select{font:inherit}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
 
 /* ==================== APPLE LAYER ====================
@@ -246,7 +250,16 @@ body.modalopen{overflow:hidden}
 .run-prog{border-radius:2px}
 .run-prog i{transition:width .5s linear}
 @media (prefers-reduced-motion:reduce){.run-prog i{transition:none}}
-/* ================== END APPLE LAYER ==================
+
+/* 9. Today is a decision surface, not a dashboard. Keep one compact status,
+   one recommendation and one primary action in the first viewport. */
+.today-status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px;font-weight:600;margin:-4px 0 14px}
+.today-status:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--bolt);box-shadow:0 0 0 4px rgba(255,159,10,.1)}
+.hero-why{margin-top:7px;color:#C7CDD6;font-size:14px;line-height:1.45}
+.hero-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:11px}
+.quiet-action{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:2px 2px 0;color:var(--muted);font-size:13px}
+.quiet-action .btn{min-height:44px;white-space:nowrap}
+/* ================== END APPLE LAYER ================== */
 </style>
 </head>
 <body>
@@ -990,7 +1003,7 @@ function icon(n){ return ICONS[n] || ""; }
 /* ---------- nav ---------- */
 let currentTab = "today";
 function navHtml(){
-  const tabs = [["today", "Today", "today"], ["library", "Library", "library"], ["history", "History", "history"], ["guide", "Guide", "guide"]];
+  const tabs = [["today", "Today", "today"], ["library", "Workouts", "library"], ["history", "Progress", "history"], ["guide", "Guide", "guide"]];
   return '<nav class="nav"><div class="nav-in">' + tabs.map(t =>
     '<button class="navbtn' + (currentTab === t[0] ? " on" : "") + '" data-action="tab" data-tab="' + t[0] + '" aria-label="' + t[1] + '">' + icon(t[2]) + "<span>" + t[1] + "</span></button>"
   ).join("") + "</div></nav>";
@@ -1029,7 +1042,8 @@ function weekStats(){
 }
 function recommend(){
   const ROT = ["sprint", "tempo", "hill", "mixed"];
-  let wantType = "sprint";
+  // With no history, start controlled. Sprint is earned after the first log.
+  let wantType = "tempo";
   if(state.logs.length){
     const last = state.logs[state.logs.length - 1];
     const li = ROT.indexOf(last.type);
@@ -1052,26 +1066,30 @@ function recommend(){
 function todayHtml(){
   const ws = weekStats();
   const rec = recommend();
-  const lane = isRange(rec) ? ' <span class="chip bolt">B ' + fmtMph(state.settings.lane) + "</span>" : "";
+  const why = state.logs.length
+    ? "Chosen to balance your recent training with a manageable next step."
+    : "A controlled first run to learn the cues and set your baseline.";
   return '<div class="lt"><div class="lt-eyebrow">Run Lab</div>' +
     '<h1 class="lt-title">Today</h1>' +
-    '<div class="lt-sub">' + ws.runs + " run" + (ws.runs === 1 ? "" : "s") + " this week, " + fmtDist(ws.mi) + "</div></div>" +
-    '<div class="weekhero">' +
-    '<div class="weekstat"><div class="ws-num tnum">' + ws.runs + '</div><div class="ws-lab">runs this week</div></div>' +
-    '<div class="weekstat"><div class="ws-num tnum">' + ws.mi.toFixed(2) + '</div><div class="ws-lab">miles this week</div></div></div>' +
-    '<div class="hero" data-action="openPreview" data-w="' + rec.id + '">' +
+    '<div class="lt-sub">Your next run, ready when you are.</div></div>' +
+    '<div class="today-status">This week: ' + ws.runs + " run" + (ws.runs === 1 ? "" : "s") + " · " + fmtDist(ws.mi) + "</div>" +
+    '<div class="hero">' +
     '<div class="spread"><div class="h-name">' + esc(rec.name) + '</div>' + icon("run") + "</div>" +
-    '<div class="h-row"><span class="chip">' + rec.min + " min</span>" +
+    '<div class="hero-why">' + why + "</div>" +
+    '<div class="hero-meta"><span class="chip">' + rec.min + " min</span>" +
     '<span class="chip">' + TYPE_LABEL[rec.type] + "</span>" +
     '<span class="chip">' + fmtDist(rec.dist) + "</span>" +
-    '<span class="chip clay">RPE ' + rec.rpe + "</span>" +
-    (isRange(rec) ? '<span class="chip bolt">pick B ' + rec.base.lo + "-" + rec.base.hi + "</span>" : '<span class="chip sky">B ' + fmtMph(rec.base) + " mph</span>") +
+    '<span class="chip clay">' + effortLabel(rec.rpe) + " · " + rec.rpe + "/10</span>" +
+    (isRange(rec) ? '<span class="chip bolt">Base speed ' + rec.base.lo + "-" + rec.base.hi + " mph</span>" : '<span class="chip sky">Base speed ' + fmtMph(rec.base) + " mph</span>") +
     (state.settings.diff ? '<span class="chip clay">Hard +' + state.settings.diff + "%</span>" : "") + "</div>" +
     '<div class="h-ctas"><button class="btn primary h-start" data-action="startWorkout" data-w="' + rec.id + '">' + icon("play") + " Start</button>" +
-    '<button class="btn" data-action="randomRun">Random</button></div></div>' +
-    '<div class="card tight"><div class="spread"><div><b>Lane B</b><div class="small muted">Default baseline for range workouts, currently ' + fmtMph(state.settings.lane) + " mph" + lane + "</div></div>" +
-    '<button class="btn small" data-action="lanePick">Change</button></div></div>';
+    '<button class="btn" data-action="openPreview" data-w="' + rec.id + '">Preview</button></div></div>' +
+    '<div class="quiet-action"><span>Range workouts use a ' + fmtMph(state.settings.lane) + ' mph base speed.</span>' +
+    '<button class="btn small" data-action="lanePick">Adjust</button></div>' +
+    '<div class="quiet-action"><span>Want a different training focus?</span><button class="btn small ghost" data-action="randomRun">Surprise me</button></div>';
 }
+
+function effortLabel(rpe){ return rpe >= 9 ? "Very hard" : rpe >= 7 ? "Hard" : rpe >= 5 ? "Moderate" : "Easy"; }
 
 /* ---------- library ---------- */
 let libDur = "all", libType = "all", libRpe = "all";
@@ -1091,7 +1109,7 @@ function libraryHtml(){
   const durs = ["all", "20", "25", "30", "35", "40", "45"];
   const types = ["all", "sprint", "tempo", "hill", "mixed"];
   const rpes = ["all", "7", "8", "9"];
-  let html = '<div class="lt"><div class="lt-eyebrow">Run Lab</div><h1 class="lt-title">Library</h1></div>';
+  let html = '<div class="lt"><div class="lt-eyebrow">Run Lab</div><h1 class="lt-title">Workouts</h1><div class="lt-sub">Find a run by time, focus or effort.</div></div>';
   html += '<div class="libfilter">' + durs.map(d => '<button class="chipbtn' + (libDur === d ? " on" : "") + '" data-action="libDur" data-v="' + d + '">' + (d === "all" ? "Any" : d + "m") + "</button>").join("") + "</div>";
   html += '<div class="libfilter">' + types.map(t => '<button class="chipbtn' + (libType === t ? " on" : "") + '" data-action="libType" data-v="' + t + '">' + (t === "all" ? "Any type" : TYPE_LABEL[t]) + "</button>").join("") + "</div>";
   html += '<div class="libfilter">' + rpes.map(r => '<button class="chipbtn' + (libRpe === r ? " on" : "") + '" data-action="libRpe" data-v="' + r + '">' + (r === "all" ? "Any RPE" : "RPE " + r) + "</button>").join("") + "</div>";
@@ -1183,7 +1201,7 @@ document.addEventListener("pointercancel", sheetDragEnd);
 
 /* ---------- history ---------- */
 function historyHtml(){
-  let html = '<div class="lt"><div class="lt-eyebrow">Run Lab</div><h1 class="lt-title">History</h1></div>';
+  let html = '<div class="lt"><div class="lt-eyebrow">Run Lab</div><h1 class="lt-title">Progress</h1><div class="lt-sub">Your completed runs and weekly consistency.</div></div>';
   const ws = weekStats();
   html += '<div class="weekhero">' +
     '<div class="weekstat"><div class="ws-num tnum">' + ws.runs + '</div><div class="ws-lab">runs this week</div></div>' +
@@ -1202,7 +1220,7 @@ function historyHtml(){
 }
 
 /* ---------- guide + settings ---------- */
-const BUILD_MARK = "Build 2026.08.19r4";
+const BUILD_MARK = "Build 2026.08.21r5";
 function guideHtml(){
   return '<div class="lt"><div class="lt-eyebrow">Run Lab</div><h1 class="lt-title">Guide</h1></div>' +
     '<div class="card tight">' + settingsHtml() + "</div>" +
@@ -1213,8 +1231,9 @@ function guideHtml(){
     '<div class="gsec"><h3>Console lag</h3><p>Treadmill consoles take a moment to reach a new speed or grade, so cues fire slightly before the printed time. The lead setting (default 3 seconds) tunes that to your machine.</p></div>' +
     '<div class="gsec"><h3>Safety</h3><p>Stop and seek help immediately for chest pain, faintness, or unusual shortness of breath. Do not push through symptoms to finish a block. The safety key belongs on you, not the console.</p></div>' +
     '<div class="gsec"><h3>Sourcing</h3><p>The interval style follows how popular treadmill classes publicly describe their cardio: guided intervals across walking, jogging, running, hills and speed pushes, with coaches calling out ranges that each runner scales to their own level. No branded or proprietary class scripts were used; every workout in this library was synthesized from those public principles plus published training research on interval, hill and tempo training.</p></div>' +
-    '<div class="gsec"><h3>Data</h3><p>Everything lives on this device. Export gives you the full state as JSON.</p>' +
-    '<div class="rowbtns" style="margin-top:8px"><button class="btn" data-action="exportOpen">Export</button><button class="btn" data-action="importOpen">Import</button></div></div>' +
+    '<div class="gsec"><h3>Privacy and data</h3><p>No account, analytics, ads or tracking. Settings and run history stay on this device. Export creates a plain JSON backup; Import replaces the current state.</p>' +
+    '<div class="rowbtns" style="margin-top:8px"><button class="btn" data-action="privacyOpen">Privacy policy</button><button class="btn" data-action="exportOpen">Export</button><button class="btn" data-action="importOpen">Import</button><button class="btn danger" data-action="eraseOpen">Erase all data</button></div></div>' +
+    '<div class="gsec"><h3>Help</h3><p>If cues stop, confirm Cue mode here and raise media volume. If saved data looks wrong, export it before reinstalling or clearing site data.</p></div>' +
     '<p class="small muted">' + BUILD_MARK + "</p>";
 }
 function settingsHtml(){
@@ -1237,6 +1256,36 @@ function settingsHtml(){
 }
 
 /* ---------- export / import ---------- */
+function privacyOpen(){
+  $("#modal-root").hidden = false;
+  $("#modal-root").innerHTML = '<div class="sheet"><div class="' + 'sheet-head"><div class="grabber"></div><h3>Privacy policy</h3>' +
+    '<div class="sub">Last updated 21 August 2026</div></div>' +
+    '<div class="gsec"><h3>The short version</h3><p>Run Lab collects nothing. There are no accounts, analytics, ads, tracking or network requests. Your settings and workout history stay on this device.</p></div>' +
+    '<div class="gsec"><h3>Your control</h3><p>Export gives you a portable JSON backup. Import replaces the current state. Erase all data removes local history, settings, backups and any pending native finish.</p></div>' +
+    '<div class="gsec"><h3>Permissions and safety</h3><p>The installed app requests no permissions. Speech and audio cues run on device. Run Lab is a training tool, not medical advice.</p></div>' +
+    '<button class="btn primary" data-action="closeModal">Done</button></div>';
+  modalShown();
+}
+function eraseOpen(){
+  $("#modal-root").hidden = false;
+  $("#modal-root").innerHTML = '<div class="sheet"><div class="' + 'sheet-head"><div class="grabber"></div><h3>Erase all data?</h3>' +
+    '<div class="sub">This permanently removes run history, settings and local backups from this device. Export first if you want a copy.</div></div>' +
+    '<div class="rowbtns"><button class="btn" data-action="closeModal">Cancel</button><button class="btn danger" data-action="eraseConfirm">Erase everything</button></div></div>';
+  modalShown();
+}
+function eraseAllData(){
+  try{
+    const keys = [];
+    for(let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+    keys.filter(k => k && (k === STORE_KEY || k === BACKUP_KEY || k.indexOf("runner.corrupt.") === 0)).forEach(k => localStorage.removeItem(k));
+  }catch(e){}
+  postNative({ action: "resetData" });
+  state = hydrate(null);
+  Store.save(state);
+  closeModal();
+  render();
+  toast("All Run Lab data erased");
+}
 function exportOpen(){
   $("#modal-root").hidden = false;
   $("#modal-root").innerHTML = '<div class="sheet"><div class="sheet-head"><div class="grabber"></div><h3>Export</h3>' +
@@ -1320,6 +1369,9 @@ document.addEventListener("click", e => {
     case "finishClose": closeRun(); render(); break;
     case "exportOpen": exportOpen(); break;
     case "importOpen": importOpen(); break;
+    case "privacyOpen": privacyOpen(); break;
+    case "eraseOpen": eraseOpen(); break;
+    case "eraseConfirm": eraseAllData(); break;
     case "copyExport": {
       const ta = $("#expjson");
       ta.select();
